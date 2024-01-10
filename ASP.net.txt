@@ -1,0 +1,313 @@
+C# code blocks are enclosed in @{ ... }
+Inline expressions (variables or functions) start with @
+DateTime.Now.DayOfWeek=Name of day
+DateTime.Now	=current date and time
+
+
+you can use the @RenderPage() method to import content from separate files
+<html>
+<body>
+@RenderPage("header.cshtml")
+<h1>Hello Web Pages</h1>
+<p>This is a paragraph</p>
+@RenderPage("footer.cshtml")
+</body>
+</html>
+
+creating a consistent look is to use a layout page.
+A layout page contains the structure, but not the content
+
+ @RenderBody() method where the content page will be included
+Each content page must start with a Layout directive.
+
+Layout Page:
+<html>
+<body>
+<p>This is header text</p>
+@RenderBody()
+<p>&copy; 2014 W3Schools. All rights reserved.</p>
+</body>
+</html>
+
+Any Web Page:
+@{Layout="Layout.cshtml";}
+
+<h1>Welcome to W3Schools</h1>
+
+<p>
+Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+</p>
+
+
+ASP.NET, files with a name that starts with an underscore cannot be browsed from the web.
+If you want to prevent your content blocks or layout files from being viewed by your users, rename the files to:
+
+_header.cshtml
+
+_footer.cshtml
+
+_Layout.cshtml
+
+
+
+
+
+Hiding Sensitive Information
+With ASP.NET, the common way to hide sensitive information (database passwords, email passwords, etc.) is to keep the information in a separate file named "_AppStart".
+
+_AppStart.cshtml
+@{
+WebMail.SmtpServer = "mailserver.example.com";
+WebMail.EnableSsl = true;
+WebMail.UserName = "username@example.com";
+WebMail.Password = "your-password";
+WebMail.From = "your-name-here@example.com";
+}
+
+
+
+ASP.NET Web Pages - Folders
+The "Account" folder contains logon and security files
+The "App_Data" folder contains databases and data files
+The "Images" folder contains images
+The "Scripts" folder contains browser scripts
+The "Shared" folder contains common files (like layout and style files)
+
+
+The virtual name of a web picture might be "Images/pic31.jpg".
+But the physical name is "C:\Johnny\Documents\MyWebSites\Demo\Images\pic31.jpg"
+
+
+The ~ Operator
+To specify the virtual root in programming code, use the ~ operator.
+var pathName = "~/dataFile.txt";
+var fileName = Server.MapPath(pathName);
+
+
+The Href Method
+The Href method converts a path used in the code to a path that the browser can understand (the browser cannot understand the ~ operator).
+@{var myStyleSheet = "~/Shared/Site.css";}
+
+<!-- This creates a link to the CSS file. -->
+<link rel="stylesheet" type="text/css" href="@Href(myStyleSheet)" />
+
+<!-- Same as : -->
+<link rel="stylesheet" type="text/css" href="/Shared/Site.css" />
+
+
+
+ASP.NET Web Pages - Global Pages
+
+Before Web Startup: _AppStart
+
+Typical use for _AppStart is startup code and initialization of global values like counters and global names.
+
+Note 1: _AppStart should have the same file extension as your web pages, like: _AppStart.cshtml. 
+
+Note 2: _AppStart has an underscore prefix. Because of this, the files cannot be browsed directly.
+
+Before Every Page: _PageStart
+
+Typical use for _PageStart is setting the layout page for all pages in a folder, or checking that a user is logged in before running a page.
+
+
+
+Creating an HTML Input Page
+
+<html>
+<body> 
+@{
+if (IsPost) { 
+string companyname = Request["CompanyName"]; 
+string contactname = Request["ContactName"]; 
+<p>You entered: <br />
+Company Name: @companyname <br />
+Contact Name: @contactname </p>
+}
+else
+{
+<form method="post" action="">
+Company Name:<br />
+<input type="text" name="CompanyName" value="" /><br />
+Contact Name:<br />
+<input type="text" name="ContactName" value="" /><br /><br />
+<input type="submit" value="Submit" class="submit" />
+</form>
+}
+} 
+</body> 
+</html>
+
+Importing Photo
+
+@{
+var imagePath="";
+if (Request["Choice"] != null)
+   {imagePath="images/" + Request["Choice"];}
+}
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Display Images</h1>
+<form method="post" action="">
+I want to see:
+<select name="Choice">
+  <option value="Photo1.jpg">Photo 1</option>
+  <option value="Photo2.jpg">Photo 2</option>
+  <option value="Photo3.jpg">Photo 3</option>
+</select>
+<input type="submit" value="Submit" />
+@if (imagePath != "")
+{
+<p>
+<img src="@imagePath" alt="Sample" />
+</p>
+} 
+</form>
+</body>
+</html>
+
+
+Objects
+
+href			Builds a URL using the specified parameters
+RenderBody()		Renders the portion of a content page that is not within a named section (In layout pages)
+RenderPage(page)	Renders the content of one page within another page
+RenderSection(section)	Renders the content of a named section (In layout pages)
+Write(object)		Writes the object as an HTML-encoded string
+WriteLiteral		Writes an object without HTML-encoding it first.
+IsPost			Returns true if the HTTP data transfer method used by the client is a POST request
+Layout			Gets or sets the path of a layout page
+Page			Provides property-like access to data shared between pages and layout pages
+Request			Gets the HttpRequest object for the current HTTP request
+Server			Gets the HttpServerUtility object that provides web-page processing methods
+
+
+Home.cshtml
+
+@{
+Layout="~/Shared/Layout.cshtml";
+Page.Title="Home Page"
+}
+
+<h1>Welcome to W3Schools</h1>
+
+<h2>Web Site Main Ingredients</h2>
+
+<p>A Home Page (Default.cshtml)</p>
+<p>A Layout File (Layout.cshtml)</p>
+<p>A Style Sheet (Site.css)</p>
+
+
+
+Layout.cshtml
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>@Page.Title</title>
+</head>
+<body>
+@RenderBody()
+</body>
+</html>
+
+ASP.NET Web Pages - Files
+ASP.NET Web Pages - Files
+
+This chapter is about working with text files.
+
+&nbsp	=	If you write 10 spaces in your text, the browser will remove 9 of them.
+		To add real spaces to your text, you can use the &nbsp; character entity.
+
+
+INPUT:=
+
+@{
+var dataFile = Server.MapPath("~/App_Data/Persons.txt");
+Array userData = File.ReadAllLines(dataFile);
+}
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Reading Data from a File</h1>
+@foreach (string dataLine in userData)
+{
+foreach (string dataItem in dataLine.Split(','))
+{
+@dataItem <text>&nbsp;</text>}
+<br>
+}
+
+</body>
+</html>
+
+OUTPUT:=
+
+Reading Data from a File
+George  Lucas  
+Steven  Spielberg  
+Alfred  Hitchcock 
+
+Server.MapPath finds the exact text file path.
+
+File.ReadAllLines opens the text file and reads all lines from the file into an array.
+
+For each dataItem in each dataline of the array the data is displayed. 
+
+Displaying Data from Database
+Displaying Data from Database
+
+INPUT:=
+
+@{
+var db = Database.Open("SmallBakery"); 
+var query = "SELECT * FROM Product"; 
+}
+<html> 
+<body> 
+<h1>Small Bakery Products</h1> 
+<table border="1" width="100%"> 
+<tr>
+<th>Id</th> 
+<th>Product</th> 
+<th>Description</th> 
+<th>Price</th> 
+</tr>
+@foreach(var row in db.Query(query))
+{
+<tr> 
+<td>@row.Id</td> 
+<td>@row.Name</td> 
+<td>@row.Description</td> 
+<td style="text-align:right">@row.Price</td> 
+</tr> 
+}
+</table> 
+</body> 
+</html>
+
+OUTPUT:= YOU WILL GET ALL RECORDS IN TABLE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
