@@ -1,4 +1,0 @@
-C:\work\goldendump11
-
-
-PSQL -d axpertdb <Cþs¥Çv÷&µÆvöÆFVæGV×ÆvöÆFVæGV×ç7ÂvöÆFVæG_çmp11
